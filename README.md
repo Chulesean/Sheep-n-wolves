@@ -14,7 +14,7 @@ Movement Rules
 Wolf Movement
 Can move one square diagonally in any direction (forward or backward)
 Movement pattern similar to a chess bishop but only one square
-Example moves: (3,0) → (2,1) or (4,1) or (2,-1) [if valid]
+Example moves: (3,0) → (2,1) or (4,1)
 
 Sheep Movement
 Can move one square diagonally but only forward (toward the wolf's starting side)
