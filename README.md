@@ -1,47 +1,32 @@
-# Sheep-n-wolves
-Game Components
-Board: 8×8 chessboard (using only the black squares/diagonal movement)
+**Nine Men's Morris**
+Introduction
+Nine Men's Morris is a two-player strategy board game where the goal is to form “mills” (three of your pieces in a straight line) to remove your opponent’s pieces. The game ends when one player is reduced to two pieces or cannot make a legal move.
 
-Pieces:
-1 Wolf
-4 Sheep
+Objective
+Reduce your opponent to two pieces or block all their moves.
 
-Initial Setup
-Wolf: Starts at the middle of the bottom row (position varies, typically (3,0) or (4,0) in 0-based indexing)
-Sheep: Start on the top row, usually on alternating black squares (e.g., (1,7), (3,7), (5,7), (7,7))
+Equipment
+A board with three concentric squares connected by lines.
+Each player has 9 pieces (black or white).
 
-Movement Rules
-Wolf Movement
-Can move one square diagonally in any direction (forward or backward)
-Movement pattern similar to a chess bishop but only one square
-Example moves: (3,0) → (2,1) or (4,1)
+Gameplay Phases
+Phase 1: Placing Pieces
+Players take turns placing one piece on any empty point.
+When a player forms a mill (three in a row), they remove one opponent piece.
+Pieces in a mill cannot be removed unless all opponent pieces are in mills.
 
-Sheep Movement
-Can move one square diagonally but only forward (toward the wolf's starting side)
-Cannot move backward or sideways
-Example: (1,7) → (0,6) or (2,6)
+Phase 2: Moving Pieces
+After all pieces are placed, players take turns moving a piece to an adjacent empty point.
+Forming a mill allows removal of one opponent piece.
 
-Win Conditions
-Wolf Wins If:
-Reaches any square on the top row (the sheep's starting side)
-The wolf wins by escaping past the sheep line
+Phase 3: Flying
+When a player has only three pieces left, their pieces may move to any empty point.
+The game continues until one player has two pieces left or cannot move.
 
-Sheep Win If:
-Block the wolf completely so it has no legal moves
-The sheep win by surrounding/trapping the wolf
+Winning
+A player wins by reducing the opponent to two pieces or blocking all their moves.
 
-Additional Rules
-No capturing/jumping: Pieces cannot capture or jump over each other
-Alternating turns: Wolf moves first, then sheep, alternating
-Mandatory movement: Players must make a move if possible
-No passing: Players cannot skip their turn
-
-Strategic Elements
-Sheep strategy: Form connected lines to block the wolf's advance
-Wolf strategy: Find gaps in the sheep formation to break through
-Key positions: Control central diagonal pathways
-
-Special Notes
-Only black squares are used for movement (like in checkers)
-All movement is diagonal only
-The game is asymmetric - wolf has more mobility but is outnumbered
+Strategy
+Create positions that allow multiple mill possibilities.
+Control intersections and keep pieces flexible.
+Force the opponent into defensive play.
