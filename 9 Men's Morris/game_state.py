@@ -44,17 +44,18 @@ class GameState:
     
     def check_win_conditions(self, current_player):
         opponent = "B" if current_player == "W" else "W"
-        
-        if self.count_pieces(opponent) < 3:
+    
+
+        if self.phase == "moving" and self.count_pieces(opponent) < 3:
             self.winner = current_player
             self.win_reason = f"{'White' if current_player == 'W' else 'Black'} wins! Opponent has less than 3 pieces."
             return True
-        
+    
         if not self.has_any_valid_moves(opponent):
             self.winner = current_player
             self.win_reason = f"{'White' if current_player == 'W' else 'Black'} wins! Opponent has no valid moves."
             return True
-        
+    
         return False
     
     def switch_turn(self):
@@ -65,4 +66,4 @@ class GameState:
         if self.phase == "moving" and not self.has_any_valid_moves(self.turn):
             opponent = "B" if self.turn == "W" else "W"
             self.winner = opponent
-            self.win_reason = f"{'White' if opponent == 'W' else 'Black'} wins! {('White' if self.turn == 'W' else 'Black')} has no valid moves."
+            self.win_reason = f"{'White' if opponent == 'W' else 'Black'} wins! {('White' if self.turn == 'W' else 'Black')}."
