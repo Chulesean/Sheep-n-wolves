@@ -16,8 +16,16 @@ class GameAssets:
         self.frame_topleft = (cx - self.frame.get_width() // 2, cy - self.frame.get_height() // 2)
         
         self.board_img = self.load_asset("assets/board.png", self.board_size, self.board_size)
+
+        piece_size = int(self.board_size * 0.06)
+        self.white_piece_img = self.load_piece_image("assets/white_piece.png", piece_size)
+        self.black_piece_img = self.load_piece_image("assets/black_piece.png", piece_size)
     
     def load_asset(self, name, w, h):
         img = pygame.image.load(name).convert_alpha()
         return pygame.transform.smoothscale(img, (int(w), int(h)))
+           
+    def load_piece_image(self, filename, size):
+        img = pygame.image.load(filename).convert_alpha()
+        return pygame.transform.smoothscale(img, (size, size))
         
