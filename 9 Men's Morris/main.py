@@ -1,88 +1,88 @@
+"""
+Main entry point and game loop for Nine Men's Morris.
+
+Initializes game components, manages main loop, handles transitions
+between menu and gameplay, and coordinates all subsystems.
+"""
+
 import pygame
 import sys
-from constants import setup_screen
-from game_assets import GameAssets
-from board_geometry import BoardGeometry
-from game_state import GameState
-from game_renderer import GameRenderer
-from game_controller import GameController
+import traceback
+from constants import setup_screen, ScreenConfig, RETURN_TO_MENU, QUIT_GAME
 from menu import MainMenu
-from bot import NineMensMorrisBot
+from game_session import GameSession
 
-def run_game(screen, screen_w, screen_h, cx, cy, vs_bot=False):
-    assets = GameAssets(screen_w, screen_h, cx, cy)
-    board_geo = BoardGeometry(assets.board_half, cx, cy)
-    game_state = GameState(board_geo)
-    renderer = GameRenderer(assets, board_geo, game_state, screen, screen_w, screen_h)
-    controller = GameController(board_geo, game_state)
+def run_game(config: ScreenConfig, vs_bot: bool = False):
+    """
+    Run a game session.
     
-    if vs_bot:
-        controller.set_vs_bot(True)
-    
-    clock = pygame.time.Clock()
-    running = True
-    
-    while running:
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                return False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-                return True  # Quay lại menu
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                point_idx = controller.nearest_point(event.pos)
-                if point_idx is not None:
-                    controller.handle_click(point_idx)
+    Args:
+        config: Screen configuration
+        vs_bot: Whether playing against bot
         
-        controller.update()
-        
-        renderer.draw_background()
-        renderer.draw_frame()
-        renderer.draw_board()
-        renderer.draw_available_positions()
-        renderer.draw_pieces()
-        renderer.draw_ui()
-        
-        pygame.display.flip()
-        clock.tick(60)
-    
-    return False
+    Returns:
+        RETURN_TO_MENU: Return to main menu
+        QUIT_GAME: Exit the game
+    """
+    session = GameSession(config, vs_bot)
+    try:
+        return session.run()
+    finally:
+        session.cleanup()
 
 def main():
+    """Main entry point."""
     pygame.init()
     
-    screen, screen_w, screen_h, cx, cy = setup_screen()
-    menu = MainMenu(screen, screen_w, screen_h)
-    
-    clock = pygame.time.Clock()
-    running = True
-    
-    while running:
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                running = False
+    try:
+        # Get screen configuration
+        config = setup_screen()
         
-        selected = menu.handle_input(events)
-        menu.draw()
-        pygame.display.flip()
+        # Create main menu
+        menu = MainMenu(config.screen, config.width, config.height)
         
-        if selected is not None:
-            if selected == 0:  # Player vs Player
-                continue_game = run_game(screen, screen_w, screen_h, cx, cy, False)
-                if not continue_game:
+        clock = pygame.time.Clock()
+        running = True
+        
+        while running:
+            # Handle events
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
                     running = False
-            elif selected == 1:  # Player vs Bot
-                continue_game = run_game(screen, screen_w, screen_h, cx, cy, True)
-                if not continue_game:
+            
+            # Update menu and get selection
+            selected_option = menu.update(events)
+            menu.draw()
+            pygame.display.flip()
+            
+            # Handle menu selection
+            if selected_option is not None:
+                if selected_option == 0:  # Player vs Player
+                    result = run_game(config, False)
+                    if result == QUIT_GAME:
+                        running = False
+                    # If RETURN_TO_MENU, continue loop
+                    
+                elif selected_option == 1:  # Player vs Bot
+                    result = run_game(config, True)
+                    if result == QUIT_GAME:
+                        running = False
+                    # If RETURN_TO_MENU, continue loop
+                    
+                elif selected_option == 2:  # Exit
                     running = False
-            elif selected == 2:  # Exit
-                running = False
+            
+            clock.tick(60)
+            
+    except Exception as e:
+        print(f"Fatal error in game: {e}")
+        traceback.print_exc()
         
-        clock.tick(60)
-    
-    pygame.quit()
-    sys.exit()
+    finally:
+        pygame.quit()
+        sys.exit()
 
 if __name__ == "__main__":
     main()
+    
