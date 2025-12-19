@@ -15,6 +15,7 @@
    + Open file "Main.py"
    + Press F5 or click "Run"
 - Run with cmd:
-  + \9 Men's Morris>python main.py
+  + cd 9 Men's Morris
+  + python main.py
  
 P/S: I tried to join both 2 games in a folder but errors ocurred and I don't know how to fix it, so I have to run them independently.
